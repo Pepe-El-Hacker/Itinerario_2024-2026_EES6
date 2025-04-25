@@ -16,23 +16,32 @@ necesarios = ["flask", "flask_socketio", "werkzeug"]
 if not all(libs_contiene(p) for p in necesarios):
     print("No están todos los paquetes en ./libs → instalando…")
     requirements = os.path.join(os.path.dirname(__file__), "requirements.txt")
-    subprocess.check_call([
-        sys.executable, "-m", "pip", "install",
-        "--no-user", "--target", libs_path,
-        "-r", requirements
-    ])
-    print("Instalación en ./libs completada.")
+    try:
+        subprocess.check_call([
+            sys.executable, "-m", "pip", "install",
+            "--no-user", "--target", libs_path,
+            "-r", requirements
+        ])
+        print("Instalación en ./libs completada.")
+    except Exception as e:
+        print(f'Error al instalar las librerias: {e}')
+        input("Presioná Enter para cerrar...")
+        sys.exit(1)
 
 # 3) Ahora sí añado ./libs al path *antes* de importar
 if libs_path not in sys.path:
     sys.path.insert(0, libs_path)
+try: 
+    # 4) Importo (ya obligatoriamente vendrán de ./libs)
+    from flask import Flask, render_template, request, send_file
+    from flask_socketio import SocketIO, emit
+    from werkzeug.utils import secure_filename
 
-# 4) Importo (ya obligatoriamente vendrán de ./libs)
-from flask import Flask, render_template, request, send_file
-from flask_socketio import SocketIO, emit
-from werkzeug.utils import secure_filename
-
-print("Módulos importados correctamente desde ./libs.")
+    print("Módulos importados correctamente desde ./libs.")
+except ImportError as e:
+    print(f'Error al importar las librerias desde ./libs: {e}')
+    input("Presioná Enter para cerrar...")
+    sys.exit(1)
 
 UPLOAD_FOLDER = os.path.expanduser(f"{current_path}/db/")  # Carpeta de subida de archivos
 

@@ -1,9 +1,17 @@
 import os,sys,subprocess # Importar módulos necesarios
 try:    # Importar secundarios
-    from flask import Flask, render_template, request, send_file
-    from flask_socketio import SocketIO, emit
-    from werkzeug.utils import secure_filename
-    print("Modulos importados correctamente.")
+    try: # Importar módulos desde la carpeta libs
+        sys.path.insert(0, os.path.abspath("./libs"))
+        from flask import Flask, render_template, request, send_file
+        from flask_socketio import SocketIO, emit
+        from werkzeug.utils import secure_filename
+        print("Modulos importados correctamente desde libs.")
+    except ImportError as e: # Intentar importar módulos desde la computadora
+        print(f'Error al importar los modulos desde libs: {e}')
+        from flask import Flask, render_template, request, send_file
+        from flask_socketio import SocketIO, emit
+        from werkzeug.utils import secure_filename
+        print("Modulos importados correctamente desde la pc.")
 except ImportError as e:    # Instalar e importar módulos si no están instalados
     print(f"Error al importar módulos: {e}")
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])

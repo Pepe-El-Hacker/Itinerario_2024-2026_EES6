@@ -96,8 +96,8 @@ def subir_archivo():
         archivo.save(ruta)
         # Avisamos a todos los clientes que la lista cambió
         socketio.emit('actualizar_lista', listar_archivos(), namespace='/', to=None)
-        return 'Archivo subido', 200
-    return 'No se recibió archivo', 400
+        return render_template('data.html')
+    return render_template('data.html')
 
 @app.route('/get_file/<filename>')
 def get_file(filename):

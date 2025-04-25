@@ -1,24 +1,37 @@
-import os,sys,subprocess # Importar módulos necesarios
-try:    # Importar secundarios
-    try: # Importar módulos desde la carpeta libs
-        sys.path.insert(0, os.path.abspath("./libs"))
-        from flask import Flask, render_template, request, send_file
-        from flask_socketio import SocketIO, emit
-        from werkzeug.utils import secure_filename
-        print("Modulos importados correctamente desde libs.")
-    except ImportError as e: # Intentar importar módulos desde la computadora
-        print(f'Error al importar los modulos desde libs: {e}')
-        from flask import Flask, render_template, request, send_file
-        from flask_socketio import SocketIO, emit
-        from werkzeug.utils import secure_filename
-        print("Modulos importados correctamente desde la pc.")
-except ImportError as e:    # Instalar e importar módulos si no están instalados
-    print(f"Error al importar módulos: {e}")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-    from flask import Flask, render_template, request, send_file
-    from flask_socketio import SocketIO, emit
-    from werkzeug.utils import secure_filename
-    print("Modulos importados correctamente.")
+import os, sys, subprocess
+
+# 1) Defino y creo ./libs
+libs_path = os.path.abspath("./libs")
+os.makedirs(libs_path, exist_ok=True)
+
+# 2) Compruebo si ya están los paquetes en ./libs
+def libs_contiene(paquete_nombre):
+    # busca carpeta o egg/wheel del paquete
+    base = os.path.join(libs_path, paquete_nombre)
+    return os.path.isdir(base) or any(fn.startswith(paquete_nombre) for fn in os.listdir(libs_path))
+
+# si falta alguno, lo instalo
+necesarios = ["flask", "flask_socketio", "werkzeug"]
+if not all(libs_contiene(p) for p in necesarios):
+    print("No están todos los paquetes en ./libs → instalando…")
+    requirements = os.path.join(os.path.dirname(__file__), "requirements.txt")
+    subprocess.check_call([
+        sys.executable, "-m", "pip", "install",
+        "--no-user", "--target", libs_path,
+        "-r", requirements
+    ])
+    print("Instalación en ./libs completada.")
+
+# 3) Ahora sí añado ./libs al path *antes* de importar
+if libs_path not in sys.path:
+    sys.path.insert(0, libs_path)
+
+# 4) Importo (ya obligatoriamente vendrán de ./libs)
+from flask import Flask, render_template, request, send_file
+from flask_socketio import SocketIO, emit
+from werkzeug.utils import secure_filename
+
+print("Módulos importados correctamente desde ./libs.")
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.expanduser(f"{current_path}/db/")  # Carpeta de subida de archivos

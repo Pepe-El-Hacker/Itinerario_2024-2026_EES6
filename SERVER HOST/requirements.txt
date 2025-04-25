@@ -2,3 +2,4 @@ Flask
 Flask-SocketIO
 Werkzeug
 h11<0.15
+rarfile

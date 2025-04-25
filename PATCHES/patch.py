@@ -1,0 +1,1 @@
+print("Parche DebugPatch.py aplicado")

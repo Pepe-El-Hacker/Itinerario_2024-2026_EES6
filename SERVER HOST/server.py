@@ -1,4 +1,5 @@
-import os, sys, subprocess, urllib.request
+# Importar las librerias necesarias
+import os, sys, subprocess, urllib.request, ssl
 
 # 0) Defino y creo ./libs
 current_path = os.path.dirname(os.path.abspath(__file__))
@@ -6,7 +7,11 @@ libs_path = os.path.expanduser(f"{current_path}/libs/")
 os.makedirs(libs_path, exist_ok=True)
 
 # 1) Descargar socket.io.min.js si no está
-static_libs_path = os.path.join(current_path, "static", "libs")
+static_libs_path = os.path.join(current_path, "static")
+os.makedirs(static_libs_path, exist_ok=True)
+
+# 1) Descargar socket.io.min.js si no está
+static_libs_path = os.path.join(current_path, "static")
 os.makedirs(static_libs_path, exist_ok=True)
 
 socketio_js_path = os.path.join(static_libs_path, "socket.io.min.js")
@@ -15,8 +20,9 @@ socketio_js_url = "https://cdn.socket.io/4.7.2/socket.io.min.js"
 if not os.path.exists(socketio_js_path):
     print("Descargando socket.io.min.js…")
     try:
+        ssl._create_default_https_context = ssl._create_unverified_context
         urllib.request.urlretrieve(socketio_js_url, socketio_js_path)
-        print("✔ socket.io.min.js descargado en static/libs/")
+        print("✔ socket.io.min.js descargado en static/")
     except Exception as e:
         print(f"❌ Error al descargar socket.io.min.js: {e}")
         input("Presioná Enter para cerrar…")

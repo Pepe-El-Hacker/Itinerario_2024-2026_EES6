@@ -1,7 +1,8 @@
 import os, sys, subprocess
 
 # 1) Defino y creo ./libs
-libs_path = os.path.abspath("./libs")
+current_path = os.path.dirname(os.path.abspath(__file__))
+libs_path = os.path.expanduser(f"{current_path}/libs/")
 os.makedirs(libs_path, exist_ok=True)
 
 # 2) Compruebo si ya están los paquetes en ./libs
@@ -33,7 +34,6 @@ from werkzeug.utils import secure_filename
 
 print("Módulos importados correctamente desde ./libs.")
 
-current_path = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.expanduser(f"{current_path}/db/")  # Carpeta de subida de archivos
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)

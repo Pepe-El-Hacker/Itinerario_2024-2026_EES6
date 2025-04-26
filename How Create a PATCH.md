@@ -23,6 +23,7 @@ Nombre-del-Parche/
 │       └── imagen.png
 
 └── otros_archivos/
+
     └── datos.json
 
 

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrar Archivos</title>
+    <script src="../static/socket.io.min.js"></script>
+    <script>console.log('✅ HTML cargado, antes de script.js');</script>
+</head>
+<body>
+  <h1>🗂 Administrar Archivos</h1>
+
+  <!-- Subida -->
+  <section>
+    <h2>Subir Nuevo Archivo</h2>
+    <form id="uploadForm" method="POST" action="/upload" enctype="multipart/form-data">
+      <input type="file" id="archivoInput" name="archivo" required>
+      <button type="submit">Subir</button>
+    </form>
+  </section>
+
+  <!-- Listado y descarga -->
+  <section>
+    <h2>Archivos Disponibles</h2>
+    <ul id="fileList"></ul>
+  </section>
+
+  <p><a href="/">← Volver al Menú Principal</a></p>
+  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</body>
+</html>

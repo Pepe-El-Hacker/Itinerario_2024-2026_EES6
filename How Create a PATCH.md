@@ -23,7 +23,6 @@ Nombre-del-Parche/
 │       └── imagen.png
 
 └── otros_archivos/
-
     └── datos.json
 
 
@@ -34,11 +33,8 @@ from flask import render_template
 def init_patch(app, socketio):
 
     @app.route('/nueva_pagina')
-
     def nueva_pagina():
-
         return render_template('nueva_pagina.html')
-
     print('✅ Ruta /nueva_pagina agregada desde el parche.')
 
 
@@ -47,7 +43,5 @@ patch.py minimo:
 def init_patch(app, socketio):
 
     @app.route('/nueva_pagina')
-
     def nueva_pagina():
-
         return render_template('nueva_pagina.html')
